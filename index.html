@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo de Arquitectura Data Lakehouse</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .section-titles {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            color: #34495e;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .flow-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .flow-box {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .box-content {
+            font-size: 12px;
+            color: #7f8c8d;
+            flex-grow: 1;
+        }
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+        }
+        .arrow-right {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #95a5a6;
+        }
+        .source-box {
+            background-color: #d6eaf8;
+            border-left: 4px solid #3498db;
+        }
+        .ingest-box {
+            background-color: #d5f5e3;
+            border-left: 4px solid #2ecc71;
+        }
+        .storage-box {
+            background-color: #fef9e7;
+            border-left: 4px solid #f1c40f;
+        }
+        .transform-box {
+            background-color: #fadbd8;
+            border-left: 4px solid #e74c3c;
+        }
+        .consume-box {
+            background-color: #e8daef;
+            border-left: 4px solid #9b59b6;
+        }
+        .security-box {
+            background-color: #f2f3f4;
+            border-left: 4px solid #7f8c8d;
+        }
+        .data-flow {
+            font-size: 11px;
+            font-style: italic;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        .zone-section {
+            border-top: 1px dashed #bdc3c7;
+            margin-top: 8px;
+            padding-top: 8px;
+        }
+        .zone-title {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .zone-content {
+            font-size: 11px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Flujo de Arquitectura Data Lakehouse</h1>
+        
+        <div class="flow-diagram">
+            <div class="section-titles">
+                <div class="section-title">FUENTES DE DATOS</div>
+                <div class="section-title">INGESTA Y ORQUESTACIÓN</div>
+                <div class="section-title">ALMACENAMIENTO (Data Lakehouse)</div>
+                <div class="section-title">TRANSFORMACIÓN</div>
+                <div class="section-title">CONSUMO</div>
+            </div>
+            
+            <div class="flow-row">
+                <!-- Fuentes de Datos -->
+                <div class="flow-box source-box">
+                    <div class="box-title">Base de Datos Existente</div>
+                    <div class="box-content">
+                        <div class="tag">Relacional</div>
+                        <div class="tag">Batch</div>
+                        <p>Datos estructurados de operaciones existentes</p>
+                    </div>
+                    <div class="data-flow">Batch →</div>
+                </div>
+                
+                <!-- Flecha -->
+                <div class="arrow">
+                    <div class="arrow-right"></div>
+                </div>
+                
+                <!-- Ingesta -->
+                <div class="flow-box ingest-box">
+                    <div class="box-title">Apache Airflow</div>
+                    <div class="box-content">
+                        <p>Orquesta y programa la ingesta de datos y transformaciones</p>
+                        <p>Extrae datos de la base relacional</p>
+                    </div>
+                </div>
+                
+                <!-- Flecha -->
+                <div class="arrow">
+                    <div class="arrow-right"></div>
+                </div>
+                
+                <!-- Almacenamiento -->
+                <div class="flow-box storage-box">
+                    <div class="box-title">AWS S3 + Delta Lake</div>
+                    <div class="box-content">
+                        <div class="zone-section">
+                            <div class="zone-title">RAW Zone</div>
+                            <div class="zone-content">
+                                <div class="tag">Datos crudos</div>
+                                <p>Almacena datos sin procesar en buckets S3</p>
+                            </div>
+                        </div>
+                        
+                        <div class="zone-section">
+                            <div class="zone-title">CURATED Zone</div>
+                            <div class="zone-content">
+                                <div class="tag">Datos transformados</div>
+                                <p>Demográficos por Sede, Tendencias por película</p>
+                            </div>
+                        </div>
+                        
+                        <div class="zone-section">
+                            <div class="zone-title">ANALYTICS Zone</div>
+                            <div class="zone-content">
+                                <div class="tag">Vistas agregadas</div>
+                                <p>Vistas preparadas para análisis</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Flecha -->
+                <div class="arrow">
+                    <div class="arrow-right"></div>
+                </div>
+                
+                <!-- Transformación -->
+                <div class="flow-box transform-box">
+                    <div class="box-title">Apache Spark</div>
+                    <div class="box-content">
+                        <div class="tag">Mapeo</div>
+                        <div class="tag">Procesamiento</div>
+                        <p>Mapea datos externos con tablas existentes</p>
+                        <p>Enlaza ciudades y sedes con datos demográficos</p>
+                        <p>Relaciona géneros de películas con tendencias</p>
+                    </div>
+                    <div class="data-flow">Orquestado por Airflow</div>
+                </div>
+                
+                <!-- Flecha -->
+                <div class="arrow">
+                    <div class="arrow-right"></div>
+                </div>
+                
+                <!-- Consumo -->
+                <div class="flow-box consume-box">
+                    <div class="box-title">Power BI</div>
+                    <div class="box-content">
+                        <div class="tag">Dashboards</div>
+                        <div class="tag">Reportes</div>
+                        <p>Visualizaciones de datos demográficos por sede</p>
+                        <p>Análisis comparativo: alquileres vs streaming</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Segunda fila para API Externa -->
+            <div class="flow-row">
+                <!-- Fuentes de Datos - API Externa -->
+                <div class="flow-box source-box">
+                    <div class="box-title">API Externa</div>
+                    <div class="box-content">
+                        <div class="tag">Demográficos</div>
+                        <div class="tag">Tendencias</div>
+                        <div class="tag">Streaming</div>
+                        <p>Datos de edad, género, ubicación</p>
+                        <p>Tendencias de formatos y géneros</p>
+                        <p>Cuotas de plataformas (Netflix, Disney+)</p>
+                    </div>
+                    <div class="data-flow">Real-time →</div>
+                </div>
+                
+                <!-- Espacios en blanco para mantener la alineación -->
+                <div style="flex: 1;"></div>
+                <div style="flex: 1;"></div>
+                <div style="flex: 1;"></div>
+                <div style="flex: 1;"></div>
+            </div>
+            
+            <!-- Fila de seguridad -->
+            <div class="flow-row" style="margin-top: 20px;">
+                <div style="flex: 3;"></div>
+                <div class="flow-box security-box" style="flex: 2;">
+                    <div class="box-title">Seguridad y Gobernanza</div>
+                    <div class="box-content">
+                        <div class="tag">OAuth</div>
+                        <div class="tag">IAM</div>
+                        <div class="tag">Catálogo</div>
+                        <p>OAuth para autenticación de APIs con tokens</p>
+                        <p>IAM para control de acceso a recursos mediante permisos</p>
+                        <p>Catálogo de datos para gobernanza</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
