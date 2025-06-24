@@ -34,3 +34,5 @@ En la casilla de destinada a las busquedas, digite el "IdProducto" y de click en
 
 5. Para consultar todos los registros:
 Haga click en el botón "Buscar" sin haber diligenciado ningún campo.
+
+6. Prueba commit
